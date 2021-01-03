@@ -36,7 +36,6 @@ public class UrlConnection {
                 content = new StringBuilder();
 
                 while ((line = in.readLine()) != null) {
-
                     content.append(line);
                     content.append(System.lineSeparator());
                 }

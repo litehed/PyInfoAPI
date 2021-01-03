@@ -22,8 +22,9 @@ public class ModEventHandler {
 				new UrlConnection("posZ", GathererUtil.getPlayerZ(event.player));
 				tick=0;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				tick = 0;
 				e.printStackTrace();
+				System.out.println("No Server Detected!");
 			}
 		}
 		
