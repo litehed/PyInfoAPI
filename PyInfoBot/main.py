@@ -1,8 +1,11 @@
+import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
+
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 
-import Run
+import commands
+from Examples import TestMovement
 from PyInfoFiles import Variables
 
 hostName = "localhost"
@@ -10,6 +13,7 @@ serverPort = 8080
 
 
 class MyServer(BaseHTTPRequestHandler):
+
     def do_GET(self):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
@@ -22,14 +26,10 @@ class MyServer(BaseHTTPRequestHandler):
         query_components = parse_qs(urlparse(self.path).query)
         if 'posX' in query_components:
             Variables.posX = query_components["posX"][0]
-            Run.commands()
         if 'posY' in query_components:
             Variables.posY = query_components["posY"][0]
-            Run.commands()
         if 'posZ' in query_components:
             Variables.posZ = query_components["posZ"][0]
-            Run.commands()
-
         positionX = f"<html><head></head><body><h1>Current Player X: {Variables.posX}</h1></body></html>"
         positionY = f"<html><head></head><body><h1>Current Player Y: {Variables.posY}</h1></body></html>"
         positionZ = f"<html><head></head><body><h1>Current Player Z: {Variables.posZ}</h1></body></html>"
@@ -39,6 +39,22 @@ class MyServer(BaseHTTPRequestHandler):
         self.wfile.write(bytes(positionY, "utf8"))
         self.wfile.write(bytes(positionZ, "utf8"))
 
+
+class MyThread(threading.Thread):
+    def __init__(self, threadID, name, counter):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.counter = counter
+
+    def run(self):
+        print("Starting " + self.name)
+        commands.commands()
+        print("Exiting " + self.name)
+
+
+thread1 = MyThread(3, "Command-Thread", 1)
+thread1.start()
 
 if __name__ == "__main__":
     webServer = HTTPServer((hostName, serverPort), MyServer)

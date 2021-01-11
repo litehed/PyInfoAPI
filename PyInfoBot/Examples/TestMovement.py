@@ -1,10 +1,15 @@
 from PyInfoFiles import Variables
 import time
-import pyautogui
 
 
 def test():
-    if Variables.posX == "150":
-        time.sleep(5)
-        pyautogui.click()
+    print("Hello")
+    while True:
         print(Variables.posX)
+        time.sleep(5)
+    print("poop")
+
+
+def forward(blocks):
+    while Variables.posX < Variables.posX + blocks:
+        print("movement")
